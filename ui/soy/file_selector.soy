@@ -1,0 +1,41 @@
+{namespace floodyUi.fileSelector}
+
+{template .fileSelector}
+  {@param floodyManageUrl:string}
+  {@param files:list<[id:string, name:string, recency:string]>}
+  {@param eventName:string}
+
+  {if length($files) > 0}
+    <div class="select-floody-instance">
+      <table class="recent-documents">
+        <tr>
+          <th colspan='2'>Recently Viewed Documents</th>
+          <th>Updated</th>
+        </tr>
+        {for $file in $files}
+          {call .fileDisplay}
+            {param floodyManageUrl: $floodyManageUrl /}
+            {param file: $file /}
+          {/call}
+        {/for}
+      </table>
+    </div>
+  {/if}
+  <div class="add-button" onclick="throwEvent('{$eventName}')">+</div>
+{/template}
+
+
+{template .fileDisplay}
+  {@param floodyManageUrl:string}
+  {@param file:[id:string, name:string, recency:string]}
+
+  <tr onclick="location.href='{$floodyManageUrl + $file.id}'">
+    <td>
+      <img src="//fonts.gstatic.com/s/i/productlogos/sheets_2020q4/v10/192px.svg"
+           style="height:20px; width:auto;"
+           alt="Google Sheets Logo" />
+    </td>
+    <td style="text-align:left;">{$file.name}</td>
+    <td>{$file.recency}</td>
+  </tr>
+{/template}

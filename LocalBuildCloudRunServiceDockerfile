@@ -1,0 +1,6 @@
+FROM adoptopenjdk/openjdk11:alpine-jre
+
+COPY floodyapp.jar .
+
+# Run the web service on container startup.
+CMD ["java", "-jar", "floodyapp.jar"]

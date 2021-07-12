@@ -1,0 +1,350 @@
+{namespace floodyUi.gtm}
+
+/**
+ * Show Dialog for the GTM user input.
+ */
+{template .GTMUserInput}
+  <div class="modal-content gtm-box">
+    <h2 class="modal-title">Enter GTM details</h2>
+    <div class="modal-body gtm-body">
+      <div id="gtm-details">
+        <label class="gtm-labels gtm-labels-title">GTM Container ID:</label>
+        <input id="gtm-container-id" cols="45" placeholder="eg. GTM-DH35HF" class="GTMText">
+      </div>
+      <div id="gtm-approver-emails" class="display-column">
+        <label class="gtm-labels gtm-labels-title">Approver Emails:</label>
+        <input id="gtm-approver-emails-id" cols="45" placeholder="eg. abc@xyz.com, def@xyz.com" class="GTMText">
+      </div>
+      <div id="gtm-further-details-div" class="display-column">
+        <label class="gtm-labels gtm-labels-title">Further Details:</label>
+        <textarea id="gtm-requester-message-id"
+                  placeholder="Please add extra information in this field, such as the client name, your
+                             name, and your company name."
+                  rows="10"
+                  cols="45">
+        </textarea>
+        <label class="gtm-labels" style="margin: 15px 0;">
+          <b>IMPORTANT</b>: When you submit this form, you’ll be
+      taken to a page with a link for the GTM approver. <u>You must share this link with the GTM approver</u>,
+      for them to be able to approve and push selected Floodlight activities.
+        </label>
+      </div>
+    </div>
+    <div id="gtm-request-spinner"
+         style="display: none;
+                margin-left: auto;
+                margin-right: auto;">
+    </div>
+    <footer class="modal-footer">
+      <button id="close" class="button close modal-button" onclick="closeGenericModal()">Cancel</button>
+      <button id="submit" class="button blue-button submit modal-button" onclick="submitGTM()">Submit</button>
+    </footer>
+  </div>
+{/template}
+
+/**
+ * Shows GTM info box that will be displayed after GTM input provided by user.
+ */
+{template .GTMInfoBox}
+  {@param response: [requestId: int, requestUri: string, status: [success: bool, errorMessage: string], request: [spreadsheetId: string, gtmContainerId: string, requesterMessage: string, approverEmails: list<string>]]}
+  {@param hostname: string}
+  <div class="modal-content gtm-box">
+    <h2 class="modal-title">GTM details to be emailed to GTM approver</h2>
+    <div class="modal-body gtm-body">
+      <div id="gtm-response-info">
+        <label class="gtm-labels display-row"><b>IMPORTANT</b>: You must copy this link and send
+          it to the GTM approver. They will then be able to push and approve all the activities.
+        </label>
+        <label class="gtm-labels display-row">
+          <b>Status</b><em>: {$response.status.success?'Success':'Failed'}</em>
+        </label>
+        <label class="gtm-labels display-row">
+          <b>Request ID</b><em>: {$response.requestId}</em>
+        </label>
+        <label class="display-row">
+          <input id="gtm-request-url" class="display-row" value="{$hostname}{$response.requestUri}" readonly/>
+          {call floodyUi.floody.copyButton}
+            {param elementId: 'gtm-request-url' /}
+          {/call}
+        </label>
+      </div>
+    </div>
+    <footer class="modal-footer">
+      <button id="close" class="button close modal-button" onclick="closeGenericModal()">Close
+      </button>
+    </footer>
+  </div>
+{/template}
+
+
+/**
+ * GTM Approval UI
+ */
+{template .floodlightActivitiesTable}
+  {@param floodlightActivities: list<[name: string, dcmAdvertiserId: int, type: string, cat: string, countingMethod: string, customVariables: list<string>]>}
+  <table border="1">
+    <thead>
+    <th style="background-color:#fff2cc;">
+      Floodlight Activity Name
+    </th>
+    <th style="background-color:#fff2cc;">
+      Floodlight Config Id (src=)
+    </th>
+    <th style="background-color:#fff2cc;">
+      Activity Tag String (cat=)
+    </th>
+    <th style="background-color: #d9ead3;">
+      Group Tag string (type=)
+    </th>
+    <th style="background-color: #b4a7d6;">
+      Counting Methodology
+    </th>
+    <th style="background-color: #cfe2f3;">
+      Custom Variables
+    </th>
+    </thead>
+    <tbody>
+      {if length($floodlightActivities) > 0}
+        {for $activity in $floodlightActivities}
+        <tr>
+          <td title="{$activity.name}">{$activity.name}</td>
+          <td>{$activity.dcmAdvertiserId}</td>
+          <td>{$activity.cat}</td>
+          <td>{$activity.type}</td>
+          <td>{$activity.countingMethod}</td>
+          {if $activity.customVariables}
+            <td>{print join($activity.customVariables, ',')}</td>
+          {else}
+            <td></td>
+          {/if}
+        </tr>
+        {/for}
+      {else}
+      <tr>
+        <td colspan="6">Empty Request</td>
+      </tr>
+      {/if}
+    </tbody>
+  </table>
+{/template}
+
+{template .requestDisplay}
+  {@param requestId: number}
+  {@param requesterEmail: string}
+  {@param gtmContainerId: string}
+  {@param? requesterComment: string}
+  {@param floodlightActivities: list<[name: string, dcmAdvertiserId: int, type: string, cat: string, countingMethod: string, customVariables: list<string>]>}
+  {@param? authorizer: string}
+  {@param? action: string}
+  {@param? comment: string}
+  {@param? timestamp: string}
+  {@param? gtmTagOperationResults: list<[floodlightActivityName: string, success: bool, message: string]>}
+  {let $gtmUrl: '/gtmrequest' /}
+  <html>
+  <body style="font-family: sans-serif; font-size: 1.1rem;">
+  <div style="margin:4em">
+  This is a request sent by <b>{$requesterEmail}</b> using Floody.
+  <br/>
+  <p>This user would like to push the <a href="https://support.google.com/dcm/topic/6094292">Floodlight activities</a> below, to the container: <b>{$gtmContainerId}</b></p>
+    {if $requesterComment}
+    <br/><b>Message from requester:</b><br/>
+      {$requesterComment}
+    {/if}
+    {if length($floodlightActivities) > 0}
+        {if not $authorizer}
+            <div>
+                Click <b>'Approve’</b> below to push these activities to the container and approve them.
+                <br/>
+                Click <b>‘Reject’</b> to disallow.
+            </div>
+        {/if}
+    <br/>
+      {call .floodlightActivitiesTable}
+        {param floodlightActivities: $floodlightActivities /}
+      {/call}
+        {if not $authorizer}
+            <div id="gtm-action">
+                <div style="margin-top: 1em;">
+                    Comment:
+                    <input type="text"
+                           id="gtm-action-comment"
+                           style="margin-left: 0.3em; background-color: white; border: 1px solid #DADCE0">
+                </div>
+                <div style="margin-top: 1em;">
+                    Action:
+                    <button style="margin-left: 2em;"
+                            class="button cm-button navBarButton;"
+                            id="gtm-request-action-approve"
+                            onclick="sendGtmAction('{$requestId}', 'approve')">
+                        Approve
+                    </button>
+                    <button style="margin-left: 2em; width: 5.5em;"
+                            class="button trix-action navBarButton;"
+                            id="gtm-request-action-reject"
+                            onclick="sendGtmAction('{$requestId}', 'reject')">
+                        Reject
+                    </button>
+                </div>
+            </div>
+        {else}
+                <table border="1" style="margin-top: 1em;">
+                    <thead>
+                    <th style="background-color:lightgray; width:40%;">
+                        Authorized By
+                    </th>
+                    <th style="background-color:lightgray;">
+                        Action
+                    </th>
+                    <th style="background-color:lightgray;">
+                        Comment
+                    </th>
+                    <th style="background-color:lightgray;">
+                        Timestamp
+                    </th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td title="{$authorizer}">{$authorizer}</td>
+                            <td>{$action}</td>
+                          {if $comment}
+                            <td>{$comment}</td>
+                          {else}
+                            <td></td>
+                          {/if}
+                            <td>{$timestamp}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            {if $gtmTagOperationResults}
+              <table border="1" style="margin-top: 1em;">
+                <thead>
+                <th style="background-color:lightgray; width:40%;">
+                  Floodlight Activity Name
+                </th>
+                <th style="background-color:lightgray;">
+                  Status
+                </th>
+                <th style="background-color:lightgray;">
+                  Message
+                </th>
+                </thead>
+                <tbody>
+                  {if length($gtmTagOperationResults) > 0}
+                    {for $result in $gtmTagOperationResults}
+                    <tr>
+                      <td>{$result.floodlightActivityName}</td>
+                      {if $result.success}
+                        <td>Succeeded</td>
+                      {else}
+                        <td>Failed</td>
+                      {/if}
+                      {if $result.message}
+                        <td>{$result.message}</td>
+                      {else}
+                        <td></td>
+                      {/if}
+                    </tr>
+                    {/for}
+                  {else}
+                  <tr>
+                    <td colspan="6">Empty Request</td>
+                  </tr>
+                  {/if}
+                </tbody>
+              </table>
+            {/if}
+        {/if}
+    {/if}
+  <br/>
+  <div id="gtm-request-action-spinner"
+       style="display: none;
+                margin-left: 10em;
+                margin-right: auto;">
+  </div>
+  <div id="gtm-tag-operation-results"></div>
+  <p><strong>What is Floody?</strong>
+  <br/>
+  It"s a tool that enables bulk uploading of Floodlight activities to Google Tag Manager.</p>
+  </div>
+  </body>
+  </html>
+{/template}
+
+{template .gtmTagOperationResultsDisplay}
+  {@param? gtmTagOperationResults: list<[floodlightActivity: string, success: bool, message: string]>}
+  {@param action: string}
+  <div style="margin-bottom: 1em;">Action Taken: <b>{$action}</b></div>
+  {if $gtmTagOperationResults}
+    <table border="1">
+      <thead>
+      <th style="background-color:#fff2cc; width:40%;">
+        Floodlight Activity Name
+      </th>
+      <th style="background-color:#fff2cc;">
+        Status
+      </th>
+      <th style="background-color:#fff2cc;">
+        Message
+      </th>
+      </thead>
+      <tbody>
+        {if length($gtmTagOperationResults) > 0}
+          {for $result in $gtmTagOperationResults}
+          <tr>
+            <td>{$result.floodlightActivity}</td>
+            {if $result.success}
+              <td>Succeeded</td>
+            {else}
+              <td>Failed</td>
+            {/if}
+            {if $result.message}
+              <td>{$result.message}</td>
+            {else}
+              <td></td>
+            {/if}
+          </tr>
+          {/for}
+        {else}
+        <tr>
+          <td colspan="6">Empty Request</td>
+        </tr>
+        {/if}
+      </tbody>
+    </table>
+  {/if}
+{/template}
+
+{template .gtmActionDisplay}
+  {@param gtmAction: [authorizer: string, timestamp: string, action: string, comment: string]}
+  {@param requestId: int}
+  {@param requesterEmail: string}
+  {@param gtmContainerId: string}
+  {@param floodlightActivities: list<[name: string, dcmAdvertiserId: int, type: string, cat: string, countingMethod: string, customVariables: list<string>]>}
+  <html>
+  <body style="font-family: sans-serif;font-size: 1.2rem;">
+  GTM Push changes requested by {$requesterEmail} have been <b>{$gtmAction.action}</b>&nbsp;
+  by {$gtmAction.authorizer} at {$gtmAction.timestamp} with reason as:
+  <br/>
+    {$gtmAction.comment}
+  <br/>
+  <h3>Push Request Details</h3>
+  <strong>Id:</strong>&nbsp;{$requestId}<br/>
+  <strong>GTM Container:</strong>&nbsp;{$gtmContainerId}<br/>
+  <br/>
+    {call .floodlightActivitiesTable}
+      {param floodlightActivities: $floodlightActivities /}
+    {/call}
+  </body>
+  </html>
+{/template}
+
+{template .gtmBar}
+  {@param? gtmContainerId: string}
+  {@param? requesterEmail: string}
+  {@param? requestId: string}
+    <div class="page">
+      <div class="spreadsheet-title">
+        #{$requestId} {$gtmContainerId} (Requester: {$requesterEmail})
+      </div>
+    </div>
+{/template}

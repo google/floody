@@ -1,0 +1,85 @@
+//
+// Copyright 2021 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto2";
+
+package com.google.floody.protobuf;
+
+message AnalyticsHitData {
+  required string property_id = 1;
+
+  // User information
+  optional string user_ip = 5;
+  optional string user_agent = 6;
+  optional string document_location = 7;
+
+  required UserInformation user_information = 10;
+
+  required EventInformation event_information = 15;
+}
+
+message UserInformation {
+  optional string id = 1 [default = "anonymous"];
+  optional IdType id_type = 2 [default = UNKNOWN_ID_TYPE];
+  optional EventSource event_source = 3 [default = UNKNOWN_EVENT_SOURCE];
+}
+
+message EventInformation{
+  optional EventCategory event_category = 1 [default = UNKNOWN_EVENT_CATEGORY];
+  optional EventAction event_action = 2 [default = UNKNOWN_EVENT_ACTION];
+}
+
+enum IdType{
+  UNKNOWN_ID_TYPE = 0;
+  GAID = 1;
+  UUID = 2;
+}
+
+enum EventSource {
+  UNKNOWN_EVENT_SOURCE = 0;
+  WEB = 1;
+  WEB_STAGING = 2;
+}
+
+/** User Actions. */
+enum EventAction {
+  UNKNOWN_EVENT_ACTION = 0;
+  ADD_ROWS = 1;
+  CREATE_SHEET = 2;
+  EXPORT_TO_DCM = 3;
+  EXPORT_TO_GTM = 4;
+  EXPORT_TO_GTM_REQUEST = 5;
+  EXPORT_TO_SHEET = 6;
+  IMPORT_FROM_DCM = 7;
+  LINK_PROFILE_TO_SHEET = 8;
+  LIST_ACCESSIBLE_ACCOUNTS = 9;
+  LIST_ACCESSIBLE_FLOODLIGHT_CONFIGS = 10;
+  LIST_SHEETS = 11;
+  LIST_USER_PROFILES = 12;
+  SHARE_SHEET = 13;
+  SPREADSHEET_AUTH_CHECK = 14;
+  UPDATE_SPREADSHEET_TITLE = 15;
+}
+
+enum EventCategory {
+  UNKNOWN_EVENT_CATEGORY = 0;
+  CREATE_NEW_FLOODY = 1;
+  FLOODY_OPS = 2;
+  GTM = 3;
+  HOME = 4;
+  SHEET_OPS = 5;
+  USER_OPS = 6;
+}

@@ -1,0 +1,73 @@
+//
+// Copyright 2021 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+//
+
+syntax = "proto3";
+
+package com.google.floody.protobuf;
+
+import "google/protobuf/timestamp.proto";
+import "protos/sheet_objects.proto";
+
+// Data Exchange Object to share through UserAccess Service.
+message DcmObject {
+
+  int64 id = 1;
+  string name = 2;
+  DcmObjectType type = 3;
+
+  // Enumeration to classify DcmObject data.
+  enum DcmObjectType {
+    UNKNOWN_DCM_OBJECT_TYPE = 0;
+    ACCOUNT = 1;
+    ADVERTISER = 2;
+    USER_PROFILE = 3;
+  }
+}
+
+message DcmObjectList {
+  repeated DcmObject items = 1;
+}
+
+// Model representing the auth status of the user for the given SpreadsheetId
+// and metadata .
+message UiSpreadsheetAuthResponse {
+  UiSpreadsheetAuthStatus status = 1;
+
+  FloodySheet spreadsheet_information = 5;
+
+  SpreadsheetDcmInformation dcm_information = 10;
+  repeated DcmObject user_dcm_profiles = 11;
+
+  // Users' authorization to the DCM and/or Floody Spreadsheet.
+  enum UiSpreadsheetAuthStatus {
+    NO_AUTH = 0;
+    FULL_AUTH = 1;
+    SHEET_ONLY_AUTH = 2;
+    DCM_ONLY_AUTH = 3;
+  }
+}
+
+
+message RecentSheetsResponse {
+  repeated FloodySheet spreadsheets = 1;
+}
+
+// Heartbeat
+message HeartBeat {
+  .google.protobuf.Timestamp timestamp = 1;
+  string user_token = 2;
+  string token_info = 3;
+}

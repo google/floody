@@ -1,0 +1,48 @@
+{namespace floodyUi.manage}
+
+/**
+ *
+ */
+{template .actionBar}
+  {@param? selectedProfile: string}
+  {@param? profiles: list<[id:string, name:string]>}
+  {@param? spreadsheetTitle: string}
+  {@param? userAuthStatus: string}
+  {@param? userAuthHelpMessage: string}
+  <div class="page">
+    <div class="spreadsheet-title">{$spreadsheetTitle}</div>
+  <div id="manage-controls" style="white-space: nowrap">
+  {if $userAuthStatus == 'FULL_AUTH'}
+    <button class="button cm-button navBarButton" onclick="importFromDcm()"
+            title="Import all details from Campaign Manager.">Import</button>
+  <button class="button cm-button navBarButton" onclick="exportToDcm()"
+          title='Export selected details (Update="Y") to Campaign Manager.'>Export</button>
+  <button class="button cm-button navBarButton" onclick="showGTMUserInput()"
+          title="Push selected Floodlights to Google Tag Manager.">Push to GTM</button>
+  <button class="button blue-button navBarButton" onclick="showShareDialog()"
+          title="Share the Sheet with other CM users.">Share</button>
+  <button class="button trix-action navBarButton" onclick="addRows()"
+          title="Will add 100 rows to the bottom of the ‘Activities’ sheet.">Add rows</button>
+<div class="action-bar-profiles">
+{if $profiles}
+  <label for="profile-id">Profile ID:</label>
+<select id="profile-id">
+  <option value=""></option>
+{for $profile in $profiles}
+{if $selectedProfile == $profile.id}
+        <option value="{$profile.id}" selected>{$profile.name}</option>
+{else}
+        <option value="{$profile.id}">{$profile.name}</option>
+{/if}
+{/for}
+</select>
+{else}
+  <span>No valid profile ID's found.</span>
+{/if}
+</div>
+{else}
+<span>User Unauthorized: ({$userAuthStatus}) - {$userAuthHelpMessage}</span>
+{/if}
+</div>
+</div>
+{/template}
