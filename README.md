@@ -15,6 +15,11 @@ Floody features: (all of the following support bulk operations)
 Floody Uses Google Sheets to provide you with an easy bulk editing interface, 
 the spreedsheet is synced to the Campaign Manager 360 using API, when you click Import/Export.
 
+
+## Architecture
+
+![architecture](floody_architecture.svg)
+
 Floody uses Google Cloud to power-up behind the scenes.
 It uses billable components of Google Cloud, including the following:
 
