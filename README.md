@@ -45,8 +45,10 @@ You need a Google Cloud [project](https://cloud.google.com/resource-manager/docs
 
    ```shell
    gcloud services enable \
+   appengine.googleapis.com \
    cloudbuild.googleapis.com \
    cloudscheduler.googleapis.com \
+   datastore.googleapis.com \
    dfareporting.googleapis.com \
    drive.googleapis.com \
    run.googleapis.com \
@@ -131,27 +133,19 @@ gcloud secrets versions add "floody-client-id" --data-file=-
 
 Floody uses Cloud Datastore to store GTM export requests.
 
-Create a Cloud Datastore instance:
-1. Go to the [Google Cloud Platform Console](https://console.cloud.google.com)
-1. Click Datastore on the left panel under DATABASES section
-1. Select Firestore in Datastore mode 
-   > Ensure that Cloud Run and Datastore instances are in the same Google Cloud 
-   > region.
+Create the Datastore database:
+
+```shell
+gcloud datastore databases create --region="${REGION_ID}"
+```
+
+> Ensure that Cloud Run and Datastore instances are in the same Google Cloud 
+> region.
 
 ## Build and Deploy Floody application to Cloud Run
 
 ### Build container image
-1. Use Cloud Build to compile the application code and create the container 
-   image for Cloud Run:
 
-   ```shell
-   gcloud builds submit \
-   --tag "gcr.io/${PROJECT_ID}/floodyapp" \
-   --machine-type=e2-highcpu-32
-   ```
-
-   > The Docker script uses [Bazelisk](https://github.com/bazelbuild/bazelisk)
-   > to automatically use the Bazel version specified in `.bazelversion` for build
    
 If you want to use your own build system, you will need use the following steps: 
 
@@ -168,8 +162,48 @@ If you want to use your own build system, you will need use the following steps:
    ```shell
    bazelisk-linux-amd64 build //server:floodyapp
    ```
+
+### Deploy on App Engine (Standard)
+
+1. Update **`FLOODY_CLIENT_ID`** in `appengine/app.yaml` with the OAuth Client ID generated in the 
+   previous step.
+
+1. Create AppEngine app
+
+    ```shell
+   gcloud app create --region="${REGION_ID}"
+    ```
    
-1. Build container image:
+1. Deploy an AppEngine version
+
+    ```shell
+   gcloud app deploy --appyaml="appengine/app.yaml" bazel-bin/server/floodyapp.jar 
+    ```
+
+1. The AppEngine URL is of format `[project-id].as.r.appspot.com` or `[project-id].appspot.com`.
+   Retrieve the AppEngine URL:
+
+    ```shell
+   gcloud app describe | grep defaultHostname
+    ```
+
+### Deploy Cloud Run service
+
+1. Use Cloud Build to compile the application code and create the container
+   image for Cloud Run:
+
+   ```shell
+   gcloud builds submit \
+   --tag "gcr.io/${PROJECT_ID}/floodyapp" \
+   --machine-type=e2-highcpu-32
+   ```
+
+   > The Docker script uses [Bazelisk](https://github.com/bazelbuild/bazelisk)
+   > to automatically use the Bazel version specified in `.bazelversion` for build
+
+
+If you are using local build then use the following command to create the Cloud Run container image
+from the fat-jar:
 
    ```shell
    tar --transform="s|LocalBuildCloudRunServiceDockerfile|Dockerfile|" -czf \
@@ -180,7 +214,6 @@ If you want to use your own build system, you will need use the following steps:
    --tag "gcr.io/${PROJECT_ID}/floodyapp"
    ```
 
-### Deploy Cloud Run service
 1. Deploy FloodyApp service on Cloud Run using the container image:
 
    ```shell
