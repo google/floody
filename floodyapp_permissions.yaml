@@ -34,3 +34,11 @@ includedPermissions:
 - datastore.entities.get
 - datastore.entities.list
 - datastore.entities.update
+# Logging permission
+- logging.logEntries.create
+# Allow Debugging entry creation
+- clouddebugger.breakpoints.list
+- clouddebugger.breakpoints.listActive
+- clouddebugger.breakpoints.update
+- clouddebugger.debuggees.create
+

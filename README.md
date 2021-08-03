@@ -26,6 +26,7 @@ It uses billable components of Google Cloud, including the following:
 * [Cloud Run](https://cloud.google.com/run/pricing)
 * [Cloud Datastore](https://cloud.google.com/datastore/pricing)
 * [Cloud Secret Manager](https://cloud.google.com/secret-manager/pricing)
+* [Cloud Logging](https://cloud.google.com/logging/pricing)
 
 ## Build and Deploy Prerequisites
 
@@ -51,6 +52,7 @@ You need a Google Cloud [project](https://cloud.google.com/resource-manager/docs
    datastore.googleapis.com \
    dfareporting.googleapis.com \
    drive.googleapis.com \
+   logging.googleapis.com \
    run.googleapis.com \
    secretmanager.googleapis.com \
    sheets.googleapis.com \
@@ -177,7 +179,9 @@ If you want to use your own build system, you will need use the following steps:
 1. Deploy an AppEngine version
 
     ```shell
-   gcloud app deploy --appyaml="appengine/app.yaml" bazel-bin/server/floodyapp.jar 
+   gcloud beta app deploy \
+   --service-account="${FLOODY_SERVICE_ACCOUNT_EMAIL}" \
+   --appyaml="appengine/app.yaml" bazel-bin/server/floodyapp.jar 
     ```
 
 1. The AppEngine URL is of format `[project-id].as.r.appspot.com` or `[project-id].appspot.com`.
