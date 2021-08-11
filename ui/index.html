@@ -14,61 +14,65 @@
   ~ limitations under the License.
   -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<title>floody Homepage</title>
-<meta charset="utf-8">
-<link rel="stylesheet" href="/style/style.css">
-<link rel="stylesheet" href="/style/spinner.css">
-<script src="/scripts/floody_ui_bin.js"></script>
-<script src="https://apis.google.com/js/api.js"
-        onload="handleClientLoad()"
-        onreadystatechange="if (this.readyState === 'complete') {this.onload();}"></script>
-<script>
+  <title>floody Homepage</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/spinner.css">
+  <script src="/scripts/floody_ui_bin.js"></script>
+  <script src="https://apis.google.com/js/api.js"
+          onload="handleClientLoad()"
+          onreadystatechange="if (this.readyState === 'complete') {this.onload();}"></script>
+  <script>
     registerEventListners();
-</script>
+  </script>
 </head>
 <body>
 <div class="header" id="header"></div>
 <div class="mainPage">
-<div class="content">
-<div id="error-modal" class="modal"></div>
-<div id="prod-counsel" class="modal">
-<div class="modal-content">
-<h2 class="modal-title">Disclaimer</h2>
-<div class="disclaimer-body modal-body">By clicking "I accept"
-below you acknowledge and agree that you are authorized to accept
-the following terms on behalf of your Company and that
-<ul>
-<li>Floody's features are in Beta and, as such, are experimental.
-The functionality is provided "as-is," and you are using Floody at
-your own risk. Google does not guarantee anything with respect to
-Floody and disclaims any and all liability arising from your use of
-Floody.</li>
-<li>Floody is provided solely as an experimental tool for selected
-customers and reserves the right to discontinue the availability of
-the feature at any time.</li>
-<li>In the event that you require any assistance with Floody, reach
-out to your Google sales representative. Do not contact customer
-support.</li>
-</ul>
-<p>View the complete <a href="./security_and_privacy.html">Security
-& Pivacy Policy</a></p>
-</div>
-<footer class="disclaimer-footer modal-footer"><button id="close"
-class="button close modal-button">I accept</button></footer>
-</div>
-</div>
-<div id="floody" class="floody">
-<div class="spinner blue-spinner"></div>
-<div class="spinner red-spinner"></div>
-<div class="spinner yellow-spinner"></div>
-<div class="spinner green-spinner"></div>
-</div>
-<div id="main-notice-box" style="display:none;"></div>
-</div>
+  <div class="content">
+    <div id="error-modal" class="modal"></div>
+    <div id="prod-counsel" class="modal">
+      <div class="modal-content">
+        <h2 class="modal-title">Disclaimer</h2>
+        <div class="disclaimer-body modal-body">By clicking "I accept"
+          below you acknowledge and agree that you are authorized to accept
+          the following terms on behalf of your Company and that
+          <ul>
+            <li>Floody's features are in Beta and, as such, are experimental.
+              The functionality is provided "as-is," and you are using Floody at
+              your own risk. Google does not guarantee anything with respect to
+              Floody and disclaims any and all liability arising from your use of
+              Floody.
+            </li>
+            <li>Floody is provided solely as an experimental tool for selected
+              customers and reserves the right to discontinue the availability of
+              the feature at any time.
+            </li>
+            <li>In the event that you require any assistance with Floody, reach
+              out to your Google sales representative. Do not contact customer
+              support.
+            </li>
+          </ul>
+          <p>View the complete <a href="./security_and_privacy.html">Security
+            & Pivacy Policy</a></p>
+        </div>
+        <footer class="disclaimer-footer modal-footer">
+          <button id="close"
+                  class="button close modal-button">I accept
+          </button>
+        </footer>
+      </div>
+    </div>
+    <div id="floody" class="floody">
+      <div class="spinner blue-spinner"></div>
+      <div class="spinner red-spinner"></div>
+      <div class="spinner yellow-spinner"></div>
+      <div class="spinner green-spinner"></div>
+    </div>
+    <div id="main-notice-box" style="display:none;"></div>
+  </div>
 </div>
 </body>
 </html>

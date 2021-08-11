@@ -58,23 +58,23 @@ const renderErrorMessage = common.renderErrorMessage;
  * @type {function():void}
  */
 const renderNoProfileError = () =>
-  renderErrorMessage(
-    'No valid profile ID selected. Please select a profile ID and try again'
-  );
+    renderErrorMessage(
+        'No valid profile ID selected. Please select a profile ID and try again'
+    );
 
 /**
  * Show error modal with predefined error message for Invalid SheetId.
  * @type {function():void}
  */
 const renderInvalidSheetError = () =>
-  renderErrorMessage('Invalid Sheet Id selected.');
+    renderErrorMessage('Invalid Sheet Id selected.');
 
 /** Parse the spreadsheet id by parsing the URL. */
 const getSpreadsheetId = () =>
-  new URLSearchParams(window.location.search).get('id');
+    new URLSearchParams(window.location.search).get('id');
 
 const hideGenericModal = () =>
-  (document.getElementById('generic-modal').style.display = 'none');
+    (document.getElementById('generic-modal').style.display = 'none');
 
 const showTempalteInGenericModal = (soyTemplate, templateParams = {}) => {
   const modalDiv = document.getElementById('generic-modal');
@@ -94,23 +94,23 @@ function loadSheet() {
   const sheetsFrame = document.getElementById('sheets-frame');
   const expandButton = document.getElementById('expand-button');
   const setSheetsFrameSize = () =>
-    sheetsFrame.setAttribute('height', window.innerHeight - 165);
+      sheetsFrame.setAttribute('height', window.innerHeight - 165);
 
   if (!sheetId) {
     renderErrorMessage(
-      `Pass the spreadsheet Id in the Url as query parameter (sheetId). ${window.location.origin}${window.location.pathname}?id=YOUR_SPREADSHEET_ID`,
-      'sheets-frame'
+        `Pass the spreadsheet Id in the Url as query parameter (sheetId). ${window.location.origin}${window.location.pathname}?id=YOUR_SPREADSHEET_ID`,
+        'sheets-frame'
     );
   }
 
   checkUserAuth();
   sheetsFrame.setAttribute(
-    'src',
-    `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`
+      'src',
+      `https://docs.google.com/spreadsheets/d/${sheetId}/edit?rm=minimal`
   );
   expandButton.setAttribute(
-    'href',
-    `https://docs.google.com/spreadsheets/d/${sheetId}`
+      'href',
+      `https://docs.google.com/spreadsheets/d/${sheetId}`
   );
 
   setSheetsFrameSize();
@@ -133,7 +133,7 @@ function retrieveAndSplitArea(elementId) {
  */
 function shareSpreadsheet() {
   const isEmptyArray = item =>
-    item != null && item.length === 1 && item[0] === '';
+      item != null && item.length === 1 && item[0] === '';
 
   const users = retrieveAndSplitArea('share-users-area');
   const groups = retrieveAndSplitArea('share-groups-area');
@@ -162,21 +162,21 @@ function shareSpreadsheet() {
   fetchConfig['headers']['Content-Type'] = 'application/json';
 
   fetch(`${common.FLOODY_API_ENDPOINT}/admin/share/${sheetId}`, fetchConfig)
-    .then(() => displaySnackbar('Sharing...'))
-    .catch(error => renderError(error));
+  .then(() => displaySnackbar('Sharing...'))
+  .catch(error => renderError(error));
 }
 
 /**
  * Displays Share box to user.
  */
 const showShareDialog = () =>
-  showTempalteInGenericModal(templatesFloody.shareSheetDialog);
+    showTempalteInGenericModal(templatesFloody.shareSheetDialog);
 
 /**
  * Displays GTM User Input Box to user.
  */
 const showGTMUserInput = () =>
-  showTempalteInGenericModal(gtmTemplates.GTMUserInput);
+    showTempalteInGenericModal(gtmTemplates.GTMUserInput);
 
 /**
  * On clicking submit on the GTM user input screen.
@@ -204,25 +204,25 @@ function submitGTM() {
 
   // disable controls.
   disableElements(
-  'gtm-container-id',
-  'gtm-requester-message-id',
-  'gtm-approver-emails-id',
-  'close',
-  'submit');
+      'gtm-container-id',
+      'gtm-requester-message-id',
+      'gtm-approver-emails-id',
+      'close',
+      'submit');
 
   // show a spinner in interim.
   common.displaySpinner('gtm-request-spinner');
 
   const hostname = window.location.origin;
   fetch(`${common.FLOODY_API_ENDPOINT}/gtmrequest/create`, fetchConfig)
-    .then(response => response.json())
-    .then(response => {
-      showTempalteInGenericModal(gtmTemplates.GTMInfoBox, {
-        response: response,
-        hostname: hostname,
-      });
-    })
-    .catch(error => renderError(error));
+  .then(response => response.json())
+  .then(response => {
+    showTempalteInGenericModal(gtmTemplates.GTMInfoBox, {
+      response: response,
+      hostname: hostname,
+    });
+  })
+  .catch(error => renderError(error));
 }
 
 /**
@@ -234,30 +234,30 @@ function submitGTM() {
 function checkUserAuth() {
   const sheetId = getSpreadsheetId();
   fetch(
-    `${common.FLOODY_API_ENDPOINT}/user/checkUserAuth/${sheetId}`,
-    common.floodyGetConfig()
+      `${common.FLOODY_API_ENDPOINT}/user/checkUserAuth/${sheetId}`,
+      common.floodyGetConfig()
   )
-    .then(response => response.json())
-    .then(authResponse => {
-      const selectedProfileId = (validProfiles => {
-        return validProfiles && validProfiles.length > 0
+  .then(response => response.json())
+  .then(authResponse => {
+    const selectedProfileId = (validProfiles => {
+      return validProfiles && validProfiles.length > 0
           ? `${validProfiles[0]['id']}`
           : null;
-      })(authResponse['userDcmProfiles']);
+    })(authResponse['userDcmProfiles']);
 
-      window.sessionStorage.setItem('profileId', selectedProfileId);
+    window.sessionStorage.setItem('profileId', selectedProfileId);
 
-      common.setActionBarContents(
+    common.setActionBarContents(
         selectedProfileId,
         authResponse['userDcmProfiles'],
         authResponse['spreadsheetInformation']['name'],
         authResponse['status'],
         getAuthHelpMessage(authResponse['status'])
-      );
+    );
 
-      common.loadHeaderBar('manage');
-    })
-    .catch(error => renderError(error));
+    common.loadHeaderBar('manage');
+  })
+  .catch(error => renderError(error));
 }
 
 /**
@@ -293,11 +293,11 @@ function exportToDcm() {
 
   displaySnackbar('Exporting...');
   fetch(
-    `${common.FLOODY_API_ENDPOINT}/floody/exportToDcm/${sheetId}`,
-    common.floodyGetConfig()
+      `${common.FLOODY_API_ENDPOINT}/floody/exportToDcm/${sheetId}`,
+      common.floodyGetConfig()
   )
-    .then(response => response.text())
-    .catch(error => renderError(error));
+  .then(response => response.text())
+  .catch(error => renderError(error));
 }
 
 /** Import from CM */
@@ -312,11 +312,11 @@ function importFromDcm() {
 
   displaySnackbar('Importing...');
   fetch(
-    `${common.FLOODY_API_ENDPOINT}/floody/exportToSheet/${sheetId}`,
-    common.floodyGetConfig()
+      `${common.FLOODY_API_ENDPOINT}/floody/exportToSheet/${sheetId}`,
+      common.floodyGetConfig()
   )
-    .then(response => response.text())
-    .catch(error => renderError(error));
+  .then(response => response.text())
+  .catch(error => renderError(error));
 }
 
 /**
@@ -326,13 +326,13 @@ function addRows() {
   const sheetId = getSpreadsheetId();
   displaySnackbar('Adding rows...');
   fetch(
-    `${common.FLOODY_API_ENDPOINT}/admin/addRows/${sheetId}`,
-    common.floodyGetConfig()
+      `${common.FLOODY_API_ENDPOINT}/admin/addRows/${sheetId}`,
+      common.floodyGetConfig()
   )
-    .then(() =>
+  .then(() =>
       displaySnackbar('Successfully added 100 rows to the spreadsheet.')
-    )
-    .catch(error => renderError(error));
+  )
+  .catch(error => renderError(error));
 }
 
 exports = [

@@ -14,14 +14,11 @@
   ~ limitations under the License.
   -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<meta charset="utf-8">
-<title>Security and Privacy Policy</title>
-
-<style>
+  <meta charset="utf-8">
+  <title>Security and Privacy Policy</title>
+  <style>
     .main-box {
       width: 60%;
       background-color: #eee;
@@ -30,36 +27,58 @@
       font-family: Arial, Helvetica, sans-serif;
       font-size: 0.9rem;
     }
-</style>
+  </style>
 </head>
 <body>
 <div class="main-box">
-<h1>Floody Security and Privacy Policy</h1>
-<h3>Overview</h3>
-The Floody tool is an HTML interface which allows users to connect
-to Campaign Manager via the <a href=
-"https://developers.google.com/doubleclick-advertisers/guides/trafficking_overview">
-Campaign Manager API</a>. Users can only connect to Campaign
-Manager if they already have a User Profile set up in Campaign
-Manager as well as the permissions required to manage Floodlight
-activities.
-<h3>Requirements</h3>
-In connecting and managing Floodlight-related content in Campaign
-Manager via API, the Floody tool does not do anything that is not
-covered by Campaign Manager security and privacy policies. In fact,
-Floody accesses very few areas that are actually available via API.
-<h3>Usage of permissions</h3>
-Granted Google permissions are used as follows, your security
-tokens are <b>not</b> stored.
-<p><i>Google Profile</i> is used only to show user photo and name
-on the app, it is <b>not</b> logged or stored.</p>
-<p><i>Spreadsheets</i> permission is used to ascertain your access
-to the given spreadsheet and allow you to share the spreadsheet
-with others.</p>
-<p><i>DCM Trafficking</i> permission is used to perform action on
-your behalf in Campaign Manager using the API.</p>
-<p><i>Google Tag Manager</i> permission is used to perform action
-on your behalf to push Floodlight Activities to GTM.</p>
+  <h1>Floody Security and Privacy Policy</h1>
+  <h3>Overview</h3>
+  The Floody tool is an HTML interface which allows users to connect
+  to Campaign Manager via the
+  <a href="https://developers.google.com/doubleclick-advertisers/guides/trafficking_overview">
+    Campaign Manager API
+  </a>.
+  Users can only connect to Campaign Manager if they already have a User Profile set up in Campaign
+  Manager as well as the permissions required to manage Floodlight
+  activities.
+  <br/>
+  <br/>
+  The Floody tool allows the users to push Floodlight Activities to Google Tag Manager at bulk.
+  The system stores email addresses in a database when using "Export to GTM" feature for authorizing
+  actions related to GTM requests: view, approve and reject.
+  <br/>
+  Following users' email address are stored:
+  <ul>
+    <li>Request Creator</li>
+    <li>Approver(s)</li>
+  </ul>
+
+  <h3>Requirements</h3>
+  In connecting and managing Floodlight-related content in Campaign
+  Manager via API, the Floody tool does not do anything that is not
+  covered by Campaign Manager security and privacy policies. In fact,
+  Floody accesses very few areas that are actually available via API.
+  <h3>Usage of permissions</h3>
+  Granted Google permissions are used as follows, your security
+  tokens are <b>not</b> stored.
+  <ul>
+    <li style="padding-bottom: 5px;">
+      <i>Google Profile</i> is used only to show user photo and name on the app, it is <b>not</b>
+      logged or stored.
+    </li>
+    <li style="padding-bottom: 5px;">
+      <i>Spreadsheets</i> permission is used to ascertain your access to the given spreadsheet and
+      allow you to share the spreadsheet with others.
+    </li>
+    <li style="padding-bottom: 5px;">
+      <i>DCM Trafficking</i> permission is used to perform action on your behalf in Campaign Manager
+      using the API.
+    </li>
+    <li style="padding-bottom: 5px;">
+      <i>Google Tag Manager Editor</i> permission is used to perform action on your behalf to push the
+      Floodlight Activities to GTM.
+    </li>
+  </ul>
 </div>
 </body>
 </html>

@@ -15,27 +15,27 @@
 
 
 {template .headerBar}
-  {@param isSignedIn: bool}
-  {@param? profilePicture: string}
-  {@param barType: string}
-  {@param? selectedProfile: string}
-  {@param? profiles: list<[id:string, name:string]>}
-  {@param? spreadsheetTitle: string}
-  {@param? userAuthStatus: string}
-  {@param? userAuthHelpMessage: string}
+    {@param isSignedIn: bool}
+    {@param? profilePicture: string}
+    {@param barType: string}
+    {@param? selectedProfile: string}
+    {@param? profiles: list<[id: string, name: string]>}
+    {@param? spreadsheetTitle: string}
+    {@param? userAuthStatus: string}
+    {@param? userAuthHelpMessage: string}
   <div class="floody-logo-col">
     <a id="header-logo" href="index.html"
        class="logo">floody</a>
   </div>
   {if $barType == 'manage'}
     <div class="action-bar-col">
-      {call floodyUi.manage.actionBar}
-        {param selectedProfile: $selectedProfile /}
-        {param profiles: $profiles /}
-        {param spreadsheetTitle: $spreadsheetTitle /}
-        {param userAuthStatus: $userAuthStatus /}
-        {param userAuthHelpMessage: $userAuthHelpMessage /}
-      {/call}
+        {call floodyUi.manage.actionBar}
+            {param selectedProfile: $selectedProfile /}
+            {param profiles: $profiles /}
+            {param spreadsheetTitle: $spreadsheetTitle /}
+            {param userAuthStatus: $userAuthStatus /}
+            {param userAuthHelpMessage: $userAuthHelpMessage /}
+        {/call}
     </div>
   {elseif $barType == 'gtm' and $isSignedIn}
     <div id="gtm-header">
@@ -56,30 +56,30 @@
 
     <div class="border"></div>
 
-    {if $isSignedIn}
-      <div id="user-details">
-        {call .userdetails}
-          {param profilePicture: $profilePicture /}
-        {/call}
-      </div>
-      <div class="authDiv">
-        <button class="button authButton" onclick="handleSignOutClick()">Sign Out</button>
-      </div>
-    {else}
-      <div class="authDiv">
-        <img src="/images/btn_google_signin_dark_focus_web.png" alt="Google Sign-in" onclick="handleSignInClick()">
-      </div>
-    {/if}
+      {if $isSignedIn}
+        <div id="user-details">
+            {call .userdetails}
+                {param profilePicture: $profilePicture /}
+            {/call}
+        </div>
+        <div class="authDiv">
+          <button class="button authButton" onclick="handleSignOutClick()">Sign Out</button>
+        </div>
+      {else}
+        <div class="authDiv">
+          <img src="/images/btn_google_signin_dark_focus_web.png" alt="Google Sign-in"
+               onclick="handleSignInClick()">
+        </div>
+      {/if}
   </div>
 {/template}
-
 
 
 /**
 * User details in navbar.
 */
 {template .userdetails}
-  {@param? profilePicture: string}
+    {@param? profilePicture: string}
   <img class="profile-image" src="{$profilePicture}" alt="User Profile Picture">
 {/template}
 
@@ -92,15 +92,22 @@
     <span class="logo">floody</span>
     <br/>
     <br/>
-    <b>Easily audit your Floodlight activities:</b>
+    <b>Audit your Floodlight activities:</b>
     <ul>
       <li>View all Floodlight activities, piggybacked tags, and custom variables.</li>
     </ul>
 
     <br/>
-      <b>Easily create and manage Floodlight activities:</b>
+    <b>Create and manage Floodlight activities:</b>
     <ul>
       <li>Create new Floodlights or edit details of existing activities.</li>
+      <li>Manage piggybagged tags, assign custom variables, build audiences.</li>
+    </ul>
+
+    <br/>
+    <b>Export Floodlight activities to GTM:</b>
+    <ul>
+      <li>Bulk export Floodlight Activities to Google Tag Manager</li>
       <li>Manage piggybagged tags, assign custom variables, build audiences.</li>
     </ul>
 
@@ -121,20 +128,17 @@
         <span class="grey-text">Click on the <span class="material-icons">help</span> icon in the top-right corner of the UI.</span>
       </p>
       <br/>
-        <b>Privacy Policy</b>
-        <br/>
-        <span class="grey-text">
+      <b>Privacy Policy</b>
+      <br/>
+      <span class="grey-text">
           Google permissions are used as follows, your security tokens are <b>not</b> stored.
-          <br/>
-          <i>Google Profile</i> is used only to show user photo and name on the app, it is <b>not</b> logged or stored.
-
-          <br/>
-          <i>Spreadsheets</i> permission is used to assertain your access to the given spreadsheet and allow you to share the spreadsheet with others.
-
-          <br/>
-          <i>DCM Trafficking</i> permission is used to perform action on your behalf in Campaign Manager using the API.
-
-          Please access complete <a href="./security_and_privacy.html">Security &amp; Pivacy Policy</a>
+          <ul>
+            <li style="padding-bottom: 5px;"><i>Google Profile</i> is used only to show user photo and name on the app, it is <b>not</b> logged or stored.</li>
+            <li style="padding-bottom: 5px;"><i>Spreadsheets</i> permission is used to assertain your access to the given spreadsheet and allow you to share the spreadsheet with others.</li>
+            <li style="padding-bottom: 5px;"><i>DCM Trafficking</i> permission is used to perform action on your behalf in Campaign Manager using the API.</li>
+            <li style="padding-bottom: 5px;"><i>Google Tag Manager Editor</i> permission is used to perform action on your behalf to create new Floodlight Activity tags in Tag Manager using the API.</li>
+          </ul>
+            Please access complete <a href="./security_and_privacy.html">Security &amp; Pivacy Policy</a>
         </span>
     </div>
   </div>
@@ -145,13 +149,14 @@
  * The error modal that appears when an error occurs
  */
 {template .errorModal}
-  {@param errorMsg: string}
+    {@param errorMsg: string}
   <div class="modal-content">
     <h2 class="modal-title errors">An error occurred</h2>
     <div class="modal-body">
       Please refresh the page and try again.
       <br/><br/>
-      Should the same issue keep reocurring, please reach out to the Floody team with a description of what you were doing and the following
+      Should the same issue keep reocurring, please reach out to the Floody team with a description
+      of what you were doing and the following
       information:
     </div>
     <textarea class="error" readonly>{$errorMsg}</textarea>
@@ -166,64 +171,63 @@
  * The main form for user selection
  */
 {template .form}
-  {@param email: string}
-  {@param? selectedProfile: string}
-  {@param? profiles: list<[id:string, name:string]>}
-  {@param? selectedAccount: string}
-  {@param? accounts: list<[id:string, name:string]>}
-  {@param? selectedFloodlightConfig: string}
-  {@param? floodlightConfigs: list<[id:string, name:string]>}
-  {@param? errorMessage: string}
+    {@param email: string}
+    {@param? selectedProfile: string}
+    {@param? profiles: list<[id: string, name: string]>}
+    {@param? selectedAccount: string}
+    {@param? accounts: list<[id: string, name: string]>}
+    {@param? selectedFloodlightConfig: string}
+    {@param? floodlightConfigs: list<[id: string, name: string]>}
+    {@param? errorMessage: string}
 
-  {if isNonnull($profiles)}
-    <form id="floody-account-selector">
-      <table class="create-new-instance">
-        <tr>
-          {call .form_email}
-            {param email: $email /}
-          {/call}
-        </tr>
-        <tr>
-          {call .form_profile_selector}
-            {param selectedProfile: $selectedProfile /}
-            {param profiles: $profiles /}
-          {/call}
-        </tr>
-        {if $selectedProfile != ''}
+    {if isNonnull($profiles)}
+      <form id="floody-account-selector">
+        <table class="create-new-instance">
           <tr>
-            {call .form_account_selector}
-              {param selectedAccount: $selectedAccount /}
-              {param accounts: $accounts /}
-            {/call}
+              {call .form_email}
+                  {param email: $email /}
+              {/call}
           </tr>
-        {/if}
-        {if $selectedProfile != '' and $selectedAccount != ''}
           <tr>
-            {call .form_floodlight_selector}
-              {param selectedFloodlightConfig: $selectedFloodlightConfig /}
-              {param floodlightConfigs: $floodlightConfigs /}
-            {/call}
+              {call .form_profile_selector}
+                  {param selectedProfile: $selectedProfile /}
+                  {param profiles: $profiles /}
+              {/call}
           </tr>
-        {/if}
-      </table>
-    </form>
+            {if $selectedProfile != ''}
+              <tr>
+                  {call .form_account_selector}
+                      {param selectedAccount: $selectedAccount /}
+                      {param accounts: $accounts /}
+                  {/call}
+              </tr>
+            {/if}
+            {if $selectedProfile != '' and $selectedAccount != ''}
+              <tr>
+                  {call .form_floodlight_selector}
+                      {param selectedFloodlightConfig: $selectedFloodlightConfig /}
+                      {param floodlightConfigs: $floodlightConfigs /}
+                  {/call}
+              </tr>
+            {/if}
+        </table>
+      </form>
 
-    {if
-            $selectedProfile != '' and
-            $selectedAccount != '' and
-            $selectedFloodlightConfig != ''
-            }
-      {call .form_create_button}{/call}
+      {if
+              $selectedProfile != '' and
+              $selectedAccount != '' and
+              $selectedFloodlightConfig != ''}
+          {call .form_create_button}{/call}
+      {/if}
+    {else}
+        {call .spinner}{/call}
     {/if}
-  {else}
-    {call .spinner}{/call}
-  {/if}
 
-  {if $errorMessage}
-    {call .form_error_message}
-      {param errorMessage: $errorMessage /}
-    {/call}
-  {/if}
+    {if $errorMessage}
+        {call .form_error_message}
+            {param errorMessage: $errorMessage /}
+        {/call}
+    {/if}
 
 {/template}
 
@@ -232,12 +236,12 @@
  * Email display for selection form, post-login.
  */
 {template .form_email}
-  {@param email: string}
+    {@param email: string}
 
   <tr>
     <td>Email Address</td>
     <td>
-      <input type='text' id="email-id" value="{$email}" readonly />
+      <input type='text' id="email-id" value="{$email}" readonly/>
     </td>
   </tr>
 {/template}
@@ -247,32 +251,32 @@
  * Profile selector for selection form.
  */
 {template .form_profile_selector}
-  {@param? selectedProfile: string}
-  {@param? profiles: list<[id:string, name:string]>}
+    {@param? selectedProfile: string}
+    {@param? profiles: list<[id: string, name: string]>}
 
-  {if $profiles != null and length($profiles) > 0}
-    <td>Profile ID</td>
-    <td>
-      <input
-              id = "profile-id"
-              list = "profile-list"
-              name = "profile-id"
-              onchange = "handleProfileSelection(this.value)"
-              value = "{$selectedProfile ?: ''}"
-      />
-      <datalist id="profile-list">
-        {for $profile in $profiles}
-          <option value="{$profile.id}">{$profile.name}</option>
-        {/for}
-      </datalist>
-    </td>
-  {elseif $profiles and length($profiles) == 0}
-    <td colspan="2">No profiles available for the selected profile.</td>
-  {else}
-    {call .form_loading}
-      {param title: 'Profile ID' /}
-    {/call}
-  {/if}
+    {if $profiles != null and length($profiles) > 0}
+      <td>Profile ID</td>
+      <td>
+        <input
+            id="profile-id"
+            list="profile-list"
+            name="profile-id"
+            onchange="handleProfileSelection(this.value)"
+            value="{$selectedProfile ?: ''}"
+        />
+        <datalist id="profile-list">
+            {for $profile in $profiles}
+              <option value="{$profile.id}">{$profile.name}</option>
+            {/for}
+        </datalist>
+      </td>
+    {elseif $profiles and length($profiles) == 0}
+      <td colspan="2">No profiles available for the selected profile.</td>
+    {else}
+        {call .form_loading}
+            {param title: 'Profile ID' /}
+        {/call}
+    {/if}
 {/template}
 
 
@@ -280,26 +284,26 @@
  * Account selector for selection form.
  */
 {template .form_account_selector}
-  {@param? selectedAccount: string}
-  {@param? accounts: list<[id:string, name:string]>}
+    {@param? selectedAccount: string}
+    {@param? accounts: list<[id: string, name: string]>}
 
-  {if $accounts != null and length($accounts) > 0}
-    <td>Account ID</td>
-    <td>
-      <input
-              id = "account-id"
-              name = "account-id"
-              value = "{$selectedAccount ?: ''}"
-              disabled
-      />
-    </td>
-  {elseif $accounts and length($accounts) == 0}
-    <td colspan="2">No accounts available for the selected profile.</td>
-  {else}
-    {call .form_loading}
-      {param title: 'Account ID' /}
-    {/call}
-  {/if}
+    {if $accounts != null and length($accounts) > 0}
+      <td>Account ID</td>
+      <td>
+        <input
+            id="account-id"
+            name="account-id"
+            value="{$selectedAccount ?: ''}"
+            disabled
+        />
+      </td>
+    {elseif $accounts and length($accounts) == 0}
+      <td colspan="2">No accounts available for the selected profile.</td>
+    {else}
+        {call .form_loading}
+            {param title: 'Account ID' /}
+        {/call}
+    {/if}
 {/template}
 
 
@@ -307,32 +311,32 @@
  * Floodlight selector for selection form.
  */
 {template .form_floodlight_selector}
-  {@param? selectedFloodlightConfig: string}
-  {@param? floodlightConfigs: list<[id:string, name:string]>}
+    {@param? selectedFloodlightConfig: string}
+    {@param? floodlightConfigs: list<[id: string, name: string]>}
 
-  {if $floodlightConfigs != null and length($floodlightConfigs) > 0}
-    <td>Floodlight Configuration ID</td>
-    <td>
-      <input
-              id = "floodlight-configuration-id"
-              list = "floodlight-configuration-list"
-              name = "floodlight-configuration-id"
-              onchange = "handleFloodlightConfigSelection(this.value)"
-              value = "{$selectedFloodlightConfig ?: ''}"
-      />
-      <datalist id="floodlight-configuration-list">
-        {for $floodlightConfig in $floodlightConfigs}
-          <option value="{$floodlightConfig.id}">{$floodlightConfig.name}</option>
-        {/for}
-      </datalist>
-    </td>
-  {elseif $floodlightConfigs and length($floodlightConfigs) == 0}
-    <td colspan="2">No floodlight configurations available for the selected account.</td>
-  {else}
-    {call .form_loading}
-      {param title: 'Floodlight Configuration ID' /}
-    {/call}
-  {/if}
+    {if $floodlightConfigs != null and length($floodlightConfigs) > 0}
+      <td>Floodlight Configuration ID</td>
+      <td>
+        <input
+            id="floodlight-configuration-id"
+            list="floodlight-configuration-list"
+            name="floodlight-configuration-id"
+            onchange="handleFloodlightConfigSelection(this.value)"
+            value="{$selectedFloodlightConfig ?: ''}"
+        />
+        <datalist id="floodlight-configuration-list">
+            {for $floodlightConfig in $floodlightConfigs}
+              <option value="{$floodlightConfig.id}">{$floodlightConfig.name}</option>
+            {/for}
+        </datalist>
+      </td>
+    {elseif $floodlightConfigs and length($floodlightConfigs) == 0}
+      <td colspan="2">No floodlight configurations available for the selected account.</td>
+    {else}
+        {call .form_loading}
+            {param title: 'Floodlight Configuration ID' /}
+        {/call}
+    {/if}
 {/template}
 
 
@@ -350,7 +354,7 @@
  * Error message for the form.
  */
 {template .form_error_message}
-  {@param errorMessage: string}
+    {@param errorMessage: string}
 
   <p class="errors">{$errorMessage}</p>
 {/template}
@@ -360,14 +364,14 @@
  * Displays a spinner while loading selection items from Floody
  */
 {template .form_loading}
-  {@param title: string}
+    {@param title: string}
   <tr>
     <td>
-      {$title}
+        {$title}
     </td>
     <td>
-      {call .spinner}
-      {/call}
+        {call .spinner}
+        {/call}
     </td>
   </tr>
 {/template}
@@ -377,7 +381,7 @@
  * Generic snackbar template to inform the user of the operations being performed.
  */
 {template .snackbar}
-  {@param infoMessage: string}
+    {@param infoMessage: string}
   <div class="snackbar">
     <p class="snackbar-content">{$infoMessage}</p>
   </div>
@@ -396,26 +400,28 @@
       <textarea id="share-groups-area" rows="5" cols="30"></textarea>
     </div>
     <footer class="modal-footer">
-      <button id="share-button" class="cm-button blue-button"
-              onclick="shareSpreadsheet()">Share</button>
+      <button id="share-button"
+              class="cm-button blue-button"
+              onclick="shareSpreadsheet()">Share
+      </button>
       <button id="close" class="button close" onclick="closeGenericModal()">Close</button>
     </footer>
   </div>
 {/template}
 
 {template .copyButton}
-  {@param elementId: string}
+    {@param elementId: string}
   <div>
     <button
-            id="{$elementId}-copy-button"
-            onclick="copyText('{$elementId}')"
-            style="height: 1.8em;
-                   width: 1.8em;
-                   margin-left: 1em;
-                   margin-top: 0.3em;
-                   align-content: center;
-                   border: none;
-                   background-color: rgba(255, 255, 255, 0.25);">
+        id="{$elementId}-copy-button"
+        onclick="copyText('{$elementId}')"
+        style="height: 1.8em;
+               width: 1.8em;
+               margin-left: 1em;
+               margin-top: 0.3em;
+               align-content: center;
+               border: none;
+               background-color: rgba(255, 255, 255, 0.25);">
       <span class="material-icons">content_copy</span>
     </button>
   </div>

@@ -14,38 +14,43 @@
   ~ limitations under the License.
   -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta name="generator" content=
-"HTML Tidy for HTML5 for Linux version 5.6.0">
-<title>floody Manange</title>
-<link rel="stylesheet" href="/style/style.css">
-<link rel="stylesheet" href="/style/spinner.css">
-<script src="/scripts/manage_ui_bin.js"></script>
-<script src="https://apis.google.com/js/api.js"
-        onload="handleClientLoad()"
-        onreadystatechange="if (this.readyState === 'complete') {this.onload();}" async></script>
-<script>
+  <title>Manange Floody Sheet</title>
+  <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/spinner.css">
+  <script src="/scripts/manage_ui_bin.js"></script>
+  <script src="https://apis.google.com/js/api.js"
+          onload="handleClientLoad()"
+          onreadystatechange="if (this.readyState === 'complete') {this.onload();}" async></script>
+  <script>
     window.addEventListener('user-signed-in', () => loadSheet(), false);
-</script>
+  </script>
 </head>
 <body class="flex-fill">
 <div class="header" id="header"></div>
 <div id="my-modal" class="modal">
-<div class="modal-content">
-<div class="modal-body">User details and floodlight configuration
-details.</div>
-<button class="button close" onclick=
-"closeModal()">Ok</button></div>
+  <div class="modal-content">
+    <div class="modal-body">User details and floodlight configuration
+      details.
+    </div>
+    <button class="button close" onclick="closeModal()">Ok
+    </button>
+  </div>
 </div>
 <div id="error-modal" class="modal"></div>
 <div id="generic-modal" class="modal"></div>
 <div id="snackbar"></div>
-<div class="content-sheet flex-fill"><iframe id="sheets-frame"
-name="sheets-frame"></iframe>
-<div class="overlay"><button class="expand-button"><a id=
-"expand-button" class="icon" target="blank"><i class=
-"material-icons">fullscreen</i></a></button></div>
+<div class="content-sheet flex-fill">
+  <iframe id="sheets-frame"
+          name="sheets-frame"></iframe>
+  <div class="overlay">
+    <button class="expand-button">
+      <a id="expand-button" class="icon" target="blank">
+        <i class="material-icons">fullscreen</i>
+      </a>
+    </button>
+  </div>
 </div>
 </body>
 </html>

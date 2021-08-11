@@ -52,21 +52,21 @@ const renderError = common.renderError;
  */
 function loadProfiles() {
   fetch(common.FLOODY_API_ENDPOINT + '/user/profiles', common.floodyGetConfig())
-    .then(response => response.json())
-    .then(responseJson => {
-      if (!responseJson['items']) {
-        throw new Error(
+  .then(response => response.json())
+  .then(responseJson => {
+    if (!responseJson['items']) {
+      throw new Error(
           'Empty Profile: User does not have a Campaign Manager profile.'
-        );
-      }
+      );
+    }
 
-      return responseJson;
-    })
-    .then(dcmObjectList => {
-      STORE.profiles = dcmObjectList['items'];
-      render();
-    })
-    .catch(error => renderError(error));
+    return responseJson;
+  })
+  .then(dcmObjectList => {
+    STORE.profiles = dcmObjectList['items'];
+    render();
+  })
+  .catch(error => renderError(error));
 }
 
 /**
@@ -98,27 +98,27 @@ function handleFloodlightConfigSelection(floodlightConfigId) {
 function loadAccounts() {
   if (STORE.selectedProfile) {
     const floodyAccounts =
-      common.FLOODY_API_ENDPOINT + '/user/accounts/' + STORE.selectedProfile;
+        common.FLOODY_API_ENDPOINT + '/user/accounts/' + STORE.selectedProfile;
     fetch(floodyAccounts, common.floodyGetConfig())
-      .then(response => response.json())
-      .then(dcmObjectList => {
-        STORE.accounts = dcmObjectList['items'];
-        console.log(STORE.accounts);
-        if (STORE.accounts.length != 0) {
-          STORE.selectedAccount =
+    .then(response => response.json())
+    .then(dcmObjectList => {
+      STORE.accounts = dcmObjectList['items'];
+      console.log(STORE.accounts);
+      if (STORE.accounts.length != 0) {
+        STORE.selectedAccount =
             /** @type {{id:number}}*/
             (STORE.accounts[0]).id.toString();
-        }
-        return true;
-      })
-      .then(() => {
-        if (STORE.selectedAccount) {
-          render(loadFloodlightConfigs);
-        } else {
-          render();
-        }
-      })
-      .catch(error => renderError(error));
+      }
+      return true;
+    })
+    .then(() => {
+      if (STORE.selectedAccount) {
+        render(loadFloodlightConfigs);
+      } else {
+        render();
+      }
+    })
+    .catch(error => renderError(error));
   }
 }
 
@@ -129,13 +129,13 @@ function loadFloodlightConfigs() {
   if (STORE.selectedProfile && STORE.selectedAccount) {
     const floodyConfigsEndpoint = `${common.FLOODY_API_ENDPOINT}/user/floodlightconfigs/${STORE.selectedProfile}?accountId=${STORE.selectedAccount}`;
     fetch(floodyConfigsEndpoint, common.floodyGetConfig())
-      .then(response => response.json())
-      .then(dcmObjectList => {
-        STORE.floodlightConfigs = dcmObjectList['items'];
-        return true;
-      })
-      .then(() => render())
-      .catch(error => renderError(error));
+    .then(response => response.json())
+    .then(dcmObjectList => {
+      STORE.floodlightConfigs = dcmObjectList['items'];
+      return true;
+    })
+    .then(() => render())
+    .catch(error => renderError(error));
   }
 }
 
@@ -159,14 +159,14 @@ function createFloodyInstance() {
   STORE.setRoute(common.Routes.LOADING);
   const sheetInitUrl = `${common.FLOODY_API_ENDPOINT}/admin/init/${STORE.selectedAccount}/${STORE.selectedFloodlightConfig}`;
   fetch(sheetInitUrl, common.floodyGetConfig())
-    .then(response => response.json())
-    .then(floodySheet =>
+  .then(response => response.json())
+  .then(floodySheet =>
       safe.setLocationHref(
-        window.location,
-        `${FLOODY_MANAGE_URL}${floodySheet['id']}`
+          window.location,
+          `${FLOODY_MANAGE_URL}${floodySheet['id']}`
       )
-    )
-    .catch(error => renderError(error));
+  )
+  .catch(error => renderError(error));
 }
 
 /**
@@ -203,15 +203,15 @@ function render(callback = null) {
     case common.Routes.FILESELECT:
       common.displaySpinner('floody');
       common.getFloodyFiles().then(recentSheets =>
-        soy.renderElement(
-          document.getElementById('floody'),
-          templates_fs.fileSelector,
-          {
-            floodyManageUrl: FLOODY_MANAGE_URL,
-            files: recentSheets,
-            eventName: 'create-new-floody-instance',
-          }
-        )
+          soy.renderElement(
+              document.getElementById('floody'),
+              templates_fs.fileSelector,
+              {
+                floodyManageUrl: FLOODY_MANAGE_URL,
+                files: recentSheets,
+                eventName: 'create-new-floody-instance',
+              }
+          )
       );
       break;
 
@@ -257,8 +257,8 @@ function openDisclaimerBox() {
  */
 function isDisclaimerExpired() {
   return (
-    !window.localStorage ||
-    Number(window.localStorage.getItem('ProductCounselDisclaimerExpiry')) <
+      !window.localStorage ||
+      Number(window.localStorage.getItem('ProductCounselDisclaimerExpiry')) <
       new Date().getTime()
   );
 }
@@ -293,15 +293,15 @@ function showDisclaimerIfExpired() {
  */
 function registerEventListners() {
   window.addEventListener(
-    'display-product-counsel-message',
-    () => showDisclaimerIfExpired(),
-    false
+      'display-product-counsel-message',
+      () => showDisclaimerIfExpired(),
+      false
   );
   window.addEventListener('route-updated', () => render());
   window.addEventListener(
-    'create-new-floody-instance',
-    () => handleCreateNew(),
-    false
+      'create-new-floody-instance',
+      () => handleCreateNew(),
+      false
   );
 }
 

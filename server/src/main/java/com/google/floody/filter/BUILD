@@ -20,6 +20,7 @@ java_library(
         "@maven//:com_google_cloud_google_cloud_datastore",
         "@maven//:org_springframework_boot_spring_boot",
         "@maven//:org_springframework_spring_beans",
+        "@maven//:org_springframework_spring_core",
         "@maven//:org_springframework_spring_context",
         "@maven//:org_springframework_spring_web",
         "@maven//:org_springframework_spring_webmvc",
