@@ -22,7 +22,9 @@
   <script src="/scripts/manage_ui_bin.js"></script>
   <script src="https://apis.google.com/js/api.js"
           onload="handleClientLoad()"
-          onreadystatechange="if (this.readyState === 'complete') {this.onload();}" async></script>
+          onreadystatechange="if (this.readyState === 'complete') {this.onload();}"
+          async>
+  </script>
   <script>
     window.addEventListener('user-signed-in', () => loadSheet(), false);
   </script>
@@ -42,9 +44,8 @@
 <div id="generic-modal" class="modal"></div>
 <div id="snackbar"></div>
 <div class="content-sheet flex-fill">
-  <iframe id="sheets-frame"
-          name="sheets-frame"></iframe>
-  <div class="overlay">
+  <iframe id="sheets-frame" name="sheets-frame"></iframe>
+  <div class="overlay" style="display:none;">
     <button class="expand-button">
       <a id="expand-button" class="icon" target="blank">
         <i class="material-icons">fullscreen</i>
