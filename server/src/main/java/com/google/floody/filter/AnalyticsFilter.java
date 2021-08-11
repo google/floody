@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -40,7 +41,9 @@ public class AnalyticsFilter extends OncePerRequestFilter {
 
   @Override
   public void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      HttpServletRequest request,
+      @NonNull HttpServletResponse response,
+      @NonNull FilterChain filterChain)
       throws IOException, ServletException {
 
     if (isAnalyticsEnabledUri(request.getRequestURI())) {
@@ -78,7 +81,7 @@ public class AnalyticsFilter extends OncePerRequestFilter {
     var registrationBean = new FilterRegistrationBean<AnalyticsFilter>();
 
     registrationBean.setFilter(this);
-    registrationBean.addUrlPatterns("/admin/*", "/floody/*", "/gtmrequest/*", "/user/*");
+    registrationBean.addUrlPatterns("/*");
 
     return registrationBean;
   }

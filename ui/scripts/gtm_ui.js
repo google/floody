@@ -33,10 +33,24 @@ const displaySnackbar = common.displaySnackbar;
 const displaySpinner = common.displaySpinner;
 
 /**
+ * Alias for function to retrieve value of textbox and trim.
+ *
+ * @type {function(!string): ?string}
+ */
+const retrieveAndTrimText = common.retrieveAndTrimText;
+
+/**
  * Implementation of showing an error message in a modal window.
  * @type {function(*):void}
  */
 const renderError = common.renderError;
+
+/**
+ * Alias for disable elements.
+ *
+ * @type {function(...string):void}
+ */
+const disableElements = common.disableElements;
 
 /**
  * A function to display gtm request
@@ -46,36 +60,36 @@ function displayGtmRequest(requestId) {
   common.loadHeaderBar('gtm');
   const fetchConfig = common.floodyGetConfig();
   fetch(`${common.FLOODY_API_ENDPOINT}/gtmrequest/${requestId}`, fetchConfig)
-    .then(response => response.json())
-    .then(response => {
-      console.log(response);
-      const templateParameters = {
-        requestId: response['id'],
-        requesterEmail: response['requesterEmail'],
-        gtmContainerId: response['gtmContainerId'],
-        floodlightActivities: response['floodlightActivities'],
-      };
+  .then(response => response.json())
+  .then(response => {
+    console.log(response);
+    const templateParameters = {
+      requestId: response['id'],
+      requesterEmail: response['requesterEmail'],
+      gtmContainerId: response['gtmContainerId'],
+      floodlightActivities: response['floodlightActivities'],
+    };
 
-      if (response['actionInformation']) {
-        templateParameters['authorizer'] =
+    if (response['actionInformation']) {
+      templateParameters['authorizer'] =
           response['actionInformation']['authorizer'];
-        templateParameters['action'] = response['actionInformation']['action'];
-        templateParameters['comment'] =
+      templateParameters['action'] = response['actionInformation']['action'];
+      templateParameters['comment'] =
           response['actionInformation']['comment'];
-        templateParameters['timestamp'] = new Date(
+      templateParameters['timestamp'] = new Date(
           response['actionInformation']['timestamp']
-        ).toString();
-        templateParameters['gtmTagOperationResults'] =
+      ).toString();
+      templateParameters['gtmTagOperationResults'] =
           response['gtmTagOperationResults'];
-      }
+    }
 
-      soy.renderElement(
+    soy.renderElement(
         document.getElementById('gtm-request'),
         gtmTemplates.requestDisplay,
         templateParameters
-      );
+    );
 
-      soy.renderElement(
+    soy.renderElement(
         document.getElementById('gtm-header'),
         gtmTemplates.gtmBar,
         {
@@ -83,9 +97,9 @@ function displayGtmRequest(requestId) {
           requesterEmail: response.requesterEmail,
           requestId: response.id,
         }
-      );
-    })
-    .catch(error => renderError(error));
+    );
+  })
+  .catch(error => renderError(error));
 }
 
 /**
@@ -95,13 +109,11 @@ function displayGtmRequest(requestId) {
  * @param {!string} action: the GTM action
  */
 function sendGtmAction(requestId, action) {
-  const approveButton = document.getElementById('gtm-request-action-approve');
-  const rejectButton = document.getElementById('gtm-request-action-reject');
-  const commentTextbox = document.getElementById('gtm-action-comment');
+
   const spinner = document.getElementById('gtm-request-action-spinner');
   const actionDiv = document.getElementById('gtm-action');
 
-  const approverComment = commentTextbox.value;
+  const approverComment = retrieveAndTrimText('gtm-action-comment');
   if (action === 'reject' && !approverComment) {
     displaySnackbar('Comment is required for Rejection action');
     return;
@@ -109,9 +121,10 @@ function sendGtmAction(requestId, action) {
 
   displaySpinner('gtm-request-action-spinner');
 
-  approveButton.disabled = true;
-  rejectButton.disabled = true;
-  commentTextbox.disabled = true;
+  disableElements(
+      'gtm-request-action-approve',
+      'gtm-request-action-reject',
+      'gtm-action-comment');
 
   const fetchConfig = common.floodyGetConfig();
   fetchConfig['method'] = 'POST';
@@ -119,30 +132,30 @@ function sendGtmAction(requestId, action) {
   fetchConfig['headers']['Content-Type'] = 'application/json';
 
   fetch(
-    `${common.FLOODY_API_ENDPOINT}/gtmrequest/${requestId}:${action}`,
-    fetchConfig
+      `${common.FLOODY_API_ENDPOINT}/gtmrequest/${requestId}:${action}`,
+      fetchConfig
   )
-    .then(response => response.json())
-    .then(response => {
-      spinner.style.display = 'none';
-      actionDiv.style.display = 'none';
+  .then(response => response.json())
+  .then(response => {
+    spinner.style.display = 'none';
+    actionDiv.style.display = 'none';
 
-      const templateParameters = {
-        action: response['action'],
-      };
+    const templateParameters = {
+      action: response['action'],
+    };
 
-      if (response['gtmTagOperationResult']) {
-        templateParameters['gtmTagOperationResults'] =
+    if (response['gtmTagOperationResult']) {
+      templateParameters['gtmTagOperationResults'] =
           response['gtmTagOperationResult'];
-      }
+    }
 
-      soy.renderElement(
+    soy.renderElement(
         document.getElementById('gtm-tag-operation-results'),
         gtmTemplates.gtmTagOperationResultsDisplay,
         templateParameters
-      );
-    })
-    .catch(error => console.log(error));
+    );
+  })
+  .catch(error => console.log(error));
 }
 
 exports = [displayGtmRequest, sendGtmAction];

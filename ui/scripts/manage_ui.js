@@ -21,13 +21,25 @@ const soy = goog.require('goog.soy');
 const templatesFloody = goog.require('floodyUi.floody');
 const gtmTemplates = goog.require('floodyUi.gtm');
 
-// TODO:add JS doc for below variables
-
 /**
  * Implementation of showing a snackbar on screen.
  * @type {function(!string):void}
  */
 const displaySnackbar = common.displaySnackbar;
+
+/**
+ * Alias to retrieve text value from a text box.
+ *
+ * @type {function(!string): ?string}
+ */
+const retrieveAndTrimText = common.retrieveAndTrimText;
+
+/**
+ * Alias to disable UI elements
+ *
+ * @type {function(...string): void}
+ */
+const disableElements = common.disableElements;
 
 /**
  * Implementation of showing an error message in a modal window.
@@ -176,16 +188,8 @@ function submitGTM() {
     renderError('Invalid Sheet Id');
   }
 
-  const gtmContainerIdTextbox = document.getElementById('gtm-container-id');
-  const requesterDetailsTextbox = document.getElementById(
-    'gtm-requester-message-id'
-  );
-  const approverEmailsTextbox = document.getElementById(
-    'gtm-approver-emails-id'
-  );
-
-  const gtmContainerId = gtmContainerIdTextbox.value;
-  const requesterDetails = requesterDetailsTextbox.value;
+  const gtmContainerId = retrieveAndTrimText('gtm-container-id');
+  const requesterDetails = retrieveAndTrimText('gtm-requester-message-id');
   const approverEmails = retrieveAndSplitArea('gtm-approver-emails-id');
 
   const fetchConfig = common.floodyGetConfig();
@@ -199,11 +203,12 @@ function submitGTM() {
   fetchConfig['headers']['Content-Type'] = 'application/json';
 
   // disable controls.
-  gtmContainerIdTextbox.disabled = true;
-  requesterDetailsTextbox.disabled = true;
-  approverEmailsTextbox.disabled = true;
-  document.getElementById('close').disabled = true;
-  document.getElementById('submit').disabled = true;
+  disableElements(
+  'gtm-container-id',
+  'gtm-requester-message-id',
+  'gtm-approver-emails-id',
+  'close',
+  'submit');
 
   // show a spinner in interim.
   common.displaySpinner('gtm-request-spinner');

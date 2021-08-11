@@ -74,9 +74,9 @@ class StoreType {
   storeContentsAreValid() {
     // TODO: Validate that the values are type safe. Low priority.
     const isInvalid =
-      this.selectedProfile === '' ||
-      this.selectedAccount === '' ||
-      this.selectedFloodlightConfig === '';
+        this.selectedProfile === '' ||
+        this.selectedAccount === '' ||
+        this.selectedFloodlightConfig === '';
 
     return !isInvalid;
   }
@@ -135,24 +135,24 @@ function retrieveClientId() {
   fetch(`${FLOODY_API_ENDPOINT}/admin/clientId`, {
     headers: {Accept: 'application/json'},
   })
-    .then(response => response.json())
-    .then(clientInformationJson => {
-      STORE.clientId = clientInformationJson['clientId'].trim();
-      initGapiClient();
-    });
+  .then(response => response.json())
+  .then(clientInformationJson => {
+    STORE.clientId = clientInformationJson['clientId'].trim();
+    initGapiClient();
+  });
 }
 
 /** Initiates the gAPI client and captures sign-in status. */
 function initGapiClient() {
   gapi.client
-    .init({
-      clientId: STORE.clientId,
-      scope: OAUTH_SCOPES.join(' '),
-    })
-    .then(() => {
-      gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
-      updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
-    });
+  .init({
+    clientId: STORE.clientId,
+    scope: OAUTH_SCOPES.join(' '),
+  })
+  .then(() => {
+    gapi.auth2.getAuthInstance().isSignedIn.listen(updateSigninStatus);
+    updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
+  });
 }
 
 /**  Handles the user clicking on the "Sign In" button. */
@@ -190,8 +190,8 @@ function updateSigninStatus(isSignedIn) {
 
   if (isSignedIn) {
     if (
-      window.sessionStorage.getItem('prodCounsel') === undefined ||
-      window.sessionStorage.getItem('prodCounsel') === null
+        window.sessionStorage.getItem('prodCounsel') === undefined ||
+        window.sessionStorage.getItem('prodCounsel') === null
     ) {
       throwEvent('display-product-counsel-message');
     }
@@ -276,17 +276,17 @@ function getFloodyFiles() {
   });
 
   return fetch('/user/recentSheets', floodyGetConfig())
-    .then(response => response.json())
-    .then(recentSheets => {
-      if (!recentSheets['spreadsheets']) {
-        return Promise.resolve([]);
-      }
+  .then(response => response.json())
+  .then(recentSheets => {
+    if (!recentSheets['spreadsheets']) {
+      return Promise.resolve([]);
+    }
 
-      return recentSheets['spreadsheets'].map(
+    return recentSheets['spreadsheets'].map(
         transformFloodySheetsToFloodyFiles
-      );
-    })
-    .catch(error => renderError(error));
+    );
+  })
+  .catch(error => renderError(error));
 }
 
 /**
@@ -315,11 +315,11 @@ function setDefaultFloodlightStoreProp() {
  * @param userAuthHelpMessage
  */
 function setActionBarContents(
-  selectedProfileId,
-  validProfiles,
-  spreadsheetTitle,
-  userAuthStatus,
-  userAuthHelpMessage
+    selectedProfileId,
+    validProfiles,
+    spreadsheetTitle,
+    userAuthStatus,
+    userAuthHelpMessage
 ) {
   STORE.selectedProfileId = selectedProfileId;
   STORE.validProfiles = validProfiles;
@@ -335,7 +335,7 @@ function setActionBarContents(
  */
 function renderError(error) {
   const msg =
-    error && error['message'] ? error['message'] : JSON.stringify(error);
+      error && error['message'] ? error['message'] : JSON.stringify(error);
   renderErrorMessage(msg);
 }
 
@@ -415,6 +415,50 @@ function displaySnackbar(message) {
   }, timeout + 500);
 }
 
+/**
+ * Disables the elements based on elementIds
+ *
+ * @param {!boolean} disable when true disables the UI element.
+ * @param {!Array<string>} elementIds the DOM elementIds to disable
+ */
+function setDisabledFlagElements(disable, elementIds) {
+  if (elementIds && elementIds.length > 0) {
+    elementIds.forEach(
+        elementId => document.getElementById(elementId).disabled = disable);
+  }
+}
+
+/**
+ * Sets the disabled flag as false, to enable th UI element.
+ *
+ * @param {...string} elementIds the DOM elementIds to enable
+ * @return {void}
+ */
+function enableElements(...elementIds) {
+  setDisabledFlagElements(false, elementIds);
+}
+
+/**
+ * Sets the disabled flag as true, to disable th UI element.
+ *
+ * @param {...string} elementIds the DOM elementIds to enable
+ * @return {void}
+ */
+function disableElements(...elementIds) {
+  setDisabledFlagElements(true, elementIds);
+}
+
+/**
+ * Returns the text value of a text-box and trims if non-null.
+ *
+ * @param elementId {!string} the Element ID of the text-box
+ * @return {?string}
+ */
+function retrieveAndTrimText(elementId) {
+  const value = document.getElementById(elementId).value;
+  return (value) ? value.trim() : null;
+}
+
 exports = {
   Routes,
   STORE,
@@ -433,6 +477,9 @@ exports = {
   copyText,
   displaySnackbar,
   displaySpinner: showSpinner,
+  enableElements,
+  disableElements,
+  retrieveAndTrimText,
 };
 
 /** Export symbols to prevent minification */
