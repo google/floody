@@ -23,6 +23,7 @@ import com.google.floody.protobuf.FileOperations.FileOperationResultList;
 import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,10 +41,10 @@ public final class CronTasksController extends FloodyBaseController {
 
   @GetMapping(value = "/removeOldFiles")
   public FileOperationResultList deleteOlderFiles(
-      @RequestParam(required = false, defaultValue = "false") boolean dryRun)
-      throws IOException, InterruptedException {
+      @RequestParam(required = false, defaultValue = "false") boolean dryRun,
+      HttpServletRequest request) throws IOException, InterruptedException {
 
-    verifyCaller();
+    verifyCaller(request);
 
     var cutOffDate =
         ZonedDateTime.now(ZoneOffset.UTC).minusDays(floodyProperties.getGeneratedFileTtlDays());
@@ -51,22 +52,9 @@ public final class CronTasksController extends FloodyBaseController {
     return robotServicesFactory().buildFileDeletor(dryRun).deleteFilesLastAccessed(cutOffDate);
   }
 
-  private void verifyCaller() {
-    try {
-      var validUser =
-          userServicesFactory()
-              .getIdTokenVerifier()
-              .retrieveEmailAddress()
-              .get()
-              .equals(robotServicesFactory().getAccountEmail());
-
-      if (validUser) {
-        return;
-      }
-    } catch (Exception exception) {
-      logger.atInfo().log("error verifying caller: %s", exception.getMessage());
+  private void verifyCaller(HttpServletRequest request) {
+    if (!"true".equals(request.getHeader("X-Appengine-Cron"))) {
+      throw new UnauthorizedUserException("Unknown caller for secured endpoint");
     }
-
-    throw new UnauthorizedUserException("Unknown caller for secured endpoint");
   }
 }
