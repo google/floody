@@ -108,6 +108,12 @@ function throwEvent(name) {
   window.dispatchEvent(new Event(name));
 }
 
+/** Checks the protocol and upgrades to HTTPS if not secure. */
+function checkAndUpgradeSsl() {
+  if (window.location.protocol !== 'https:') {
+    window.location.protocol = 'https:';
+  }
+}
 /**
  * Formats a timestamp into relative strings (e.g. "today", "22 days ago", etc.)
  *
@@ -464,6 +470,7 @@ exports = {
   STORE,
   FLOODY_API_ENDPOINT,
   throwEvent,
+  checkAndUpgradeSsl,
   getProfileId,
   floodyGetConfig,
   getFloodyFiles,
@@ -491,3 +498,4 @@ window['closeGenericModal'] = closeGenericModal;
 window['copyText'] = copyText;
 window['displaySnackbar'] = displaySnackbar;
 window['loadHeaderBar'] = loadHeaderBar;
+window['checkAndUpgradeSsl'] = checkAndUpgradeSsl;
