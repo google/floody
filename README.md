@@ -1,5 +1,8 @@
 # Floody - Bulk Floodlight management
 
+> **(Update) 2021-12-13**: Campaign Mananger 360 now supports [bulk editing](https://support.google.com/campaignmanager/answer/6100588?hl=en#zippy=%2Cmore-information-about-editing-bulk-sheets) of Floodlight Activities, <br/>
+> with exception of bulk pushing to Google Tag Manager and Audience creation.
+
 Managing many Floodlight Activities using the Campaign Manager 360 user interface 
 can be time-consuming and tedious. 
 Floody makes it possible for you to edit all your Floodlight Activities using a *Single Screen*.
@@ -14,7 +17,6 @@ Floody features: (all of the following support bulk operations)
 
 Floody Uses Google Sheets to provide you with an easy bulk editing interface, 
 the spreedsheet is synced to the Campaign Manager 360 using API, when you click Import/Export.
-
 
 ## Architecture
 
