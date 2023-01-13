@@ -1,5 +1,7 @@
 # Floody - Bulk Floodlight management
 
+> **(Update) 2023-01-13**: Floody is now sunset and no longer supported. Folks are requested to use Campaign Manager's bulk features.
+
 > **(Update) 2022-08-25**: Floody is now deprecated and will only receive critical security fixes as Campaign Manager 360 now support [bulk audience creation](https://support.google.com/campaignmanager/answer/2893923?hl=en#zippy=%2Ccreate-an-audience-list%2Ccreate-or-edit-an-audience-using-a-bulk-sheet) and [Push To GTM](https://developers.google.com/doubleclick-advertisers/sheet/v1.0/floodlightActivity) features. 
 
 > **(Update) 2021-12-13**: Campaign Mananger 360 now supports [bulk editing](https://support.google.com/campaignmanager/answer/6100588?hl=en#zippy=%2Cmore-information-about-editing-bulk-sheets) of Floodlight Activities, <br/>
